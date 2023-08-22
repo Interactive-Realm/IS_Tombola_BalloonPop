@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class BalloonScript : MonoBehaviour
 {
@@ -34,8 +35,6 @@ public class BalloonScript : MonoBehaviour
         {
             _totalWeight += item;
         }
-        
-
 
         // Object definitions
         Button = this.gameObject.GetComponent<Button>();
@@ -51,63 +50,33 @@ public class BalloonScript : MonoBehaviour
         transform.position = p;
     }
 
-    public void roll()
+    public async void roll()
     {
         SetColor();
         GameManager.Instance.hasClicked = true;
         // Unrender Button
         Button.image.enabled = false;
 
-        // 0 - 100
-        float _diceRoll = Random.Range(0f, _totalWeight);
+        // Get price
+        PriceInfo price = await SupabaseClient.GetPriceInfo();
 
-        foreach (float i in _items)
-        {
-            if (i >= _diceRoll)
-            {
-                _win = i;
-                switch (_win)
-                {
-                    case 74:
-                        _topText.text = "you did not win";
-                        break;
-                    case 18.52f:
-                        _topText.text = "you won 4.price";
-                        break;
-                    case 5.56f:
-                        _topText.text = "you won 3.price";
-                        break;
-                    case 1.85f:
-                        _topText.text = "you won 2.price";
-                        break;
-                    case 0.07f:
-                        _topText.text = "you won 1.price";
-                        break;
-                    default:
-                        _topText.text = "you did not win";
-                        break;
-                }
-                return;
-            }
-            _diceRoll -= i;
-        }
+        // Update text
+        _topText.text = price.name;
+        // bottom text = price.message
     }
 
-    
 
-
-
-void SetColor()
+    void SetColor()
     {
         _topText = GameObject.Find("TopText").GetComponent<TextMeshProUGUI>();
-        if (this.gameObject.CompareTag("BlueBalloon"))
+        if (gameObject.CompareTag("BlueBalloon"))
         {
             // Set text color
             // Convert the hex color code to a Color object
             Color desiredColorBlue = HexToColor("#004cd3");
             _topText.color = desiredColorBlue;
         }
-        else if (this.gameObject.CompareTag("RedBalloon"))
+        else if (gameObject.CompareTag("RedBalloon"))
         {
             Color desiredColorRed = HexToColor("#ff0310");
             _topText.color = desiredColorRed;
