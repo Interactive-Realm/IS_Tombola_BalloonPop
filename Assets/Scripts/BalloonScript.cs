@@ -7,9 +7,6 @@ using System;
 
 public class BalloonScript : MonoBehaviour
 {
-    private float _totalWeight;
-    private float _win;
-    private List<float> _items = new List<float>();
     private TextMeshProUGUI _topText;
 
     // The balloon button
@@ -19,25 +16,11 @@ public class BalloonScript : MonoBehaviour
     public float amplitude = 4;
     public float speed = 2.5f;
 
-
-
-
     // Start is called before the first frame update
     void Start()
     {
-        _items.Add(74f);
-        _items.Add(18.52f);
-        _items.Add(5.56f);
-        _items.Add(1.85f);
-        _items.Add(0.07f);
-        _totalWeight = 0;
-        foreach (float item in _items)
-        {
-            _totalWeight += item;
-        }
-
         // Object definitions
-        Button = this.gameObject.GetComponent<Button>();
+        Button = gameObject.GetComponent<Button>();
         Button.onClick.AddListener(roll);
 
     }
