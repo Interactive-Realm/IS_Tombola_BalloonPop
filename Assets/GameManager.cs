@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,15 +28,34 @@ public class GameManager : MonoBehaviour
     public bool hasClicked;
 
     private List<GameObject> balloons;
+    public TMP_Text _prizeText;
+
+    // Prize frame and imgage
+    private GameObject picture1, picture2;
+
+    // Top text
+    private TMP_Text topText;
     private void Awake()
     {
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
+        _prizeText = GameObject.Find("PrizeText").GetComponent<TMP_Text>();
+        _prizeText.text = "";
+        topText = GameObject.Find("TopText").GetComponent<TMP_Text>();
+        topText.text = "Vælg en ballon og se om du vinder!";
     }
     private void Start()
     {
         UpdateGameState(GameState.Game);
         balloons = new List<GameObject>();
+
+        // Prize showcase
+        picture1 = GameObject.Find("Image");
+        picture2 = GameObject.Find("Image2");
+        picture1.SetActive(false);
+        picture2.SetActive(false);
+        
+
         FindBalloons();
     }
     private void Update()
@@ -87,9 +108,13 @@ public class GameManager : MonoBehaviour
     }
     public void HandlePrize()
     {
+        picture1.SetActive(true);
+        picture2.SetActive(true);
+        topText.text = "";
+
         for (int i = 0; i < balloons.Count; i++)
         {
-            balloons[i].SetActive(false);
+            balloons[i].GetComponent<Button>().interactable = false;
         }
     }
     public enum GameState

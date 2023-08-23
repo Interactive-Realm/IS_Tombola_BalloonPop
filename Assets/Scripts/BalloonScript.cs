@@ -15,14 +15,16 @@ public class BalloonScript : MonoBehaviour
     // Floating variables
     public float amplitude = 4;
     public float speed = 2.5f;
+    private TMP_Text prizeText;
 
     // Start is called before the first frame update
     void Start()
     {
+        prizeText = GameManager.Instance._prizeText;
+
         // Object definitions
         Button = gameObject.GetComponent<Button>();
         Button.onClick.AddListener(roll);
-
     }
 
     // Update is called once per frame
@@ -48,7 +50,6 @@ public class BalloonScript : MonoBehaviour
         // bottom text = price.message
     }
 
-
     void SetColor()
     {
         _topText = GameObject.Find("TopText").GetComponent<TextMeshProUGUI>();
@@ -57,12 +58,12 @@ public class BalloonScript : MonoBehaviour
             // Set text color
             // Convert the hex color code to a Color object
             Color desiredColorBlue = HexToColor("#004cd3");
-            _topText.color = desiredColorBlue;
+            prizeText.color = desiredColorBlue;
         }
         else if (gameObject.CompareTag("RedBalloon"))
         {
             Color desiredColorRed = HexToColor("#ff0310");
-            _topText.color = desiredColorRed;
+            prizeText.color = desiredColorRed;
         }
     }
 
@@ -81,5 +82,3 @@ public class BalloonScript : MonoBehaviour
         return color;
     }
 }
-
-
