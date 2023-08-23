@@ -7,8 +7,6 @@ using System;
 
 public class BalloonScript : MonoBehaviour
 {
-    private TextMeshProUGUI _topText;
-
     // The balloon button
     private Button Button;
 
@@ -46,13 +44,12 @@ public class BalloonScript : MonoBehaviour
         PriceInfo price = await SupabaseClient.GetPriceInfo();
 
         // Update text
-        _topText.text = price.name;
+        prizeText.text = price.name + " - " + price.message;
         // bottom text = price.message
     }
 
     void SetColor()
     {
-        _topText = GameObject.Find("TopText").GetComponent<TextMeshProUGUI>();
         if (gameObject.CompareTag("BlueBalloon"))
         {
             // Set text color
