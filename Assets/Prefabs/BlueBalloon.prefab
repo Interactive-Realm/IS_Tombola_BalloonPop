@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6009168254565613592}
   m_Layer: 5
   m_Name: BlueBalloon
-  m_TagString: Untagged
+  m_TagString: BlueBalloon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,3 +134,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384cadd0f71d4af48be588bbe201c7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  amplitude: 1
+  speed: 0.5

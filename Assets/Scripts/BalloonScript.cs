@@ -9,7 +9,7 @@ public class BalloonScript : MonoBehaviour
     private float _totalWeight;
     private float _win;
     private List<float> _items = new List<float>();
-    private TextMeshProUGUI _topText;
+    
 
     // The balloon button
     private Button Button;
@@ -18,12 +18,17 @@ public class BalloonScript : MonoBehaviour
     public float amplitude = 4;
     public float speed = 2.5f;
 
+    private TMP_Text prizeText;
+
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+
+        
         _items.Add(74f);
         _items.Add(18.52f);
         _items.Add(5.56f);
@@ -34,12 +39,16 @@ public class BalloonScript : MonoBehaviour
         {
             _totalWeight += item;
         }
-        
 
+
+        prizeText = GameManager.Instance._prizeText;
 
         // Object definitions
         Button = this.gameObject.GetComponent<Button>();
         Button.onClick.AddListener(roll);
+
+        
+
 
     }
 
@@ -69,22 +78,22 @@ public class BalloonScript : MonoBehaviour
                 switch (_win)
                 {
                     case 74:
-                        _topText.text = "you did not win";
+                        prizeText.text = "you did not win";
                         break;
                     case 18.52f:
-                        _topText.text = "you won 4.price";
+                        prizeText.text = "you won 4.price";
                         break;
                     case 5.56f:
-                        _topText.text = "you won 3.price";
+                        prizeText.text = "you won 3.price";
                         break;
                     case 1.85f:
-                        _topText.text = "you won 2.price";
+                        prizeText.text = "you won 2.price";
                         break;
                     case 0.07f:
-                        _topText.text = "you won 1.price";
+                        prizeText.text = "you won 1.price";
                         break;
                     default:
-                        _topText.text = "you did not win";
+                        prizeText.text = "you did not win";
                         break;
                 }
                 return;
@@ -99,18 +108,18 @@ public class BalloonScript : MonoBehaviour
 
 void SetColor()
     {
-        _topText = GameObject.Find("TopText").GetComponent<TextMeshProUGUI>();
+        
         if (this.gameObject.CompareTag("BlueBalloon"))
         {
             // Set text color
             // Convert the hex color code to a Color object
             Color desiredColorBlue = HexToColor("#004cd3");
-            _topText.color = desiredColorBlue;
+            prizeText.color = desiredColorBlue;
         }
         else if (this.gameObject.CompareTag("RedBalloon"))
         {
             Color desiredColorRed = HexToColor("#ff0310");
-            _topText.color = desiredColorRed;
+            prizeText.color = desiredColorRed;
         }
     }
 
