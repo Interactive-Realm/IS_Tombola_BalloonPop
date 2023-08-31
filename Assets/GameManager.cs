@@ -9,17 +9,8 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     // Creates an instance of Game Manager
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance is null)
-                Debug.LogError("Game Manager is NULL");
-
-            return _instance;
-        }
-    }
+    public static GameManager Instance { get; private set; }
+    
 
     // GameState Variables
     public GameState State;
@@ -30,15 +21,25 @@ public class GameManager : MonoBehaviour
     private List<GameObject> balloons;
     public TMP_Text _prizeText;
 
-    // Prize frame and imgage
-    private GameObject priceMessage;
+    // Prize frame and image
+    public GameObject prizeMessage;
+    public Button clickWindow;
 
     // Top text
     private TMP_Text topText;
     private void Awake()
     {
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
+        
         _prizeText = GameObject.Find("PrizeText").GetComponent<TMP_Text>();
         topText = GameObject.Find("TopText").GetComponent<TMP_Text>();
         topText.text = "Vælg en ballon og se om du vinder!";
@@ -48,10 +49,12 @@ public class GameManager : MonoBehaviour
         UpdateGameState(GameState.Game);
         balloons = new List<GameObject>();
 
-        // Prize showcase
-        priceMessage = GameObject.Find("PriceMessage");
-        priceMessage.SetActive(false);
-        
+        // Prize showcase set inactive
+        prizeMessage.SetActive(false);
+
+        // Prizewindow as button to restart scene
+        //clickWindow.onClick.AddListener(RestartScene);
+
 
         FindBalloons();
     }
@@ -77,6 +80,12 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    void RestartScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 
     public void UpdateGameState(GameState newState)
     {
@@ -105,7 +114,7 @@ public class GameManager : MonoBehaviour
     }
     public void HandlePrize()
     {
-        priceMessage.SetActive(true);
+        prizeMessage.SetActive(true);
         topText.text = "";
 
         for (int i = 0; i < balloons.Count; i++)
