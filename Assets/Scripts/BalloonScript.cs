@@ -3,26 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
+using UnityEngine.EventSystems;
 
-public class BalloonScript : MonoBehaviour
+public class BalloonScript : MonoBehaviour/*,IUpdateSelectedHandler*/,IPointerDownHandler,IPointerUpHandler
 {
-    // The balloon button
-    private Button Button;
+    // Balloon game object
+    public GameObject balloonObject;
+
+    // Balloon button
+    public Button balloonButton;
+    public bool isHoldingButton = false;
 
     // Floating variables
     public float amplitude = 4;
     public float speed = 2.5f;
+
+    // Growing variables
+    public float growRate = 0.4f;
+    public float shrinkRate = 0.4f;
+    public float popSize = 12;
+    public float normalSize = 2;
+
+    // Prize text
     private TMP_Text prizeText;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Prize text definition
         prizeText = GameManager.Instance._prizeText;
 
-        // Object definitions
-        Button = gameObject.GetComponent<Button>();
-        Button.onClick.AddListener(roll);
+        
+        // Set event listener for button
+        
     }
 
     // Update is called once per frame
@@ -31,14 +43,57 @@ public class BalloonScript : MonoBehaviour
         Vector3 p = transform.position;
         p.y = amplitude * Mathf.Cos(Time.time * speed);
         transform.position = p;
+
+        // Expand and shrink
+        if (isHoldingButton == true)
+        {
+            ExpandBalloon();
+        }
+        else
+            ShrinkBalloon();
+
+    }
+
+    public void OnPointerDown(PointerEventData data)
+    {
+        isHoldingButton = true;
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isHoldingButton = false;
+    }
+    private void ExpandBalloon()
+    {
+        // Expand balloon
+        balloonObject.transform.localScale += balloonObject.transform.localScale * growRate * Time.deltaTime;
+
+        // Balloon pop range
+        if(balloonObject.transform.localScale.x > popSize)
+        {
+            BalloonPOP();
+        }
+    }
+    private void ShrinkBalloon()
+    {
+        if(balloonObject.transform.localScale.x > normalSize && balloonObject.transform.localScale.y > normalSize)
+        {
+            // Shrink balloon if bigger than popRange
+            balloonObject.transform.localScale -= balloonObject.transform.localScale * (shrinkRate) * Time.deltaTime;
+        }
+        
+    }
+
+    void BalloonPOP()
+    {
+        Destroy(this.gameObject);
     }
 
     public async void roll()
     {
         SetColor();
-        GameManager.Instance.hasClicked = true;
+        //GameManager.Instance.hasClicked = true;
         // Unrender Button
-        Button.image.enabled = false;
+        //balloonButton.image.enabled = false;
 
         // Get price
         PriceInfo price = await SupabaseClient.GetPriceInfo();

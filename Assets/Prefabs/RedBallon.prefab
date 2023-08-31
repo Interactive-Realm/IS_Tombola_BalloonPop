@@ -134,5 +134,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384cadd0f71d4af48be588bbe201c7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  balloonObject: {fileID: 1245207486846755473}
+  balloonButton: {fileID: 1245207486846755484}
+  isHoldingButton: 0
   amplitude: 1
   speed: 0.5
+  growRate: 2
+  shrinkRate: 3.2
+  popSize: 14
