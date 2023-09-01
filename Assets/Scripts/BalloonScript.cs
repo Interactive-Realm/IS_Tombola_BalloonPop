@@ -27,25 +27,27 @@ public class BalloonScript : MonoBehaviour/*,IUpdateSelectedHandler*/,IPointerDo
     // Prize text
     private TMP_Text prizeText;
 
+
     void Start()
     {
-        // Prize text definition
-        prizeText = GameManager.Instance._prizeText;
 
-        
-        // Set event listener for button
-        
+        // Prize text definition
+        prizeText = UIManager.Instance._prizeText;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 p = transform.position;
-        p.y = amplitude * Mathf.Cos(Time.time * speed);
-        transform.position = p;
+
+            Vector3 pos = transform.position;
+            pos.y = amplitude * Mathf.Cos(Time.time * speed);
+            transform.position = pos;
+
+        
 
         // Expand and shrink
-        if (isHoldingButton == true)
+        if (isHoldingButton == true && GameManager.Instance.poppedBalloon == false && GameManager.Instance.introFinished == true)
         {
             ExpandBalloon();
         }
@@ -85,7 +87,9 @@ public class BalloonScript : MonoBehaviour/*,IUpdateSelectedHandler*/,IPointerDo
 
     void BalloonPOP()
     {
+        GameManager.Instance.poppedBalloon = true;
         Destroy(this.gameObject);
+        GameManager.Instance.UpdateGameState(GameState.Prize);
     }
 
     public async void roll()
